@@ -1,4 +1,4 @@
-package org.example.chatproject;
+package org.example.chatProject;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ChatProjectApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ChatProjectApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(ChatProjectApplication.class, args);
+	}
 
 }
