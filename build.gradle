@@ -29,3 +29,56 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+def frontendDir = "$projectDir/src/main/frontend"
+
+task installReact(type: Exec) {
+    workingDir "$frontendDir"
+    inputs.dir "$frontendDir"
+    group = BasePlugin.BUILD_GROUP
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine "npm.cmd", "install"
+    } else {
+        commandLine "npm", "install"
+    }
+}
+
+task startReact(type: Exec) {
+    dependsOn "installReact"
+    workingDir "$frontendDir"
+    group = BasePlugin.BUILD_GROUP
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine "npm.cmd", "start"
+    } else {
+        commandLine "npm", "start"
+    }
+    doLast {
+        // 포그라운드 실행 방지
+        standardOutput = new ByteArrayOutputStream()
+        errorOutput = new ByteArrayOutputStream()
+    }
+}
+
+task waitForReactServer {
+    dependsOn startReact
+    doLast {
+        def serverStarted = false
+        while (!serverStarted) {
+            try {
+                def connection = new URL('http://localhost:3000').openConnection()
+                connection.setConnectTimeout(1000)
+                connection.setReadTimeout(1000)
+                connection.connect()
+                serverStarted = true
+            } catch (Exception e) {
+                println 'Waiting for React server to start...'
+                sleep(2000)
+            }
+        }
+        println 'React server started.'
+    }
+}
+
+bootRun {
+    dependsOn 'waitForReactServer'
+}

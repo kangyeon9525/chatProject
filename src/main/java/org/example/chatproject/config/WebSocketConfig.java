@@ -12,9 +12,9 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
     private final ChatHandler chatHandler;
-//특정 endpoint 를 정의 한 뒤, 도메인이 다른 서버에서도 접속 가능 하도록 모든 가능성을 열어둔다(보안성 취약함)
+    //특정 endpoint 를 정의 한 뒤, 도메인이 다른 서버에서도 접속 가능 하도록 모든 가능성을 열어둔다(보안성 취약함)
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(chatHandler, "ws/chat").setAllowedOrigins("*");
+        registry.addHandler(chatHandler, "/ws/chat").setAllowedOrigins("*");
     }
 }
